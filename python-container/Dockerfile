@@ -1,16 +1,13 @@
-FROM ubuntu:22.04
+# Dockerfile
+FROM debian:bookworm-slim
 
-# Required to prevent warnings
-ARG DEBIAN_FRONTEND=noninteractive
-ARG DEBCONF_NONINTERACTIVE_SEEN=true
+RUN apt-get update && apt-get install -y python3
 
-RUN apt update && apt -y install python3
+WORKDIR /app
 
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+COPY main.py .
 
-RUN mkdir /var/www
+EXPOSE 8888
 
-COPY ./index.html /var/www
+CMD ["python3", "-m", "http.server", "8888"]
 
-WORKDIR /var/www
-CMD ["/usr/bin/python3", "-m", "http.server",  "8888"]
